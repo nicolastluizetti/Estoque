@@ -23,12 +23,17 @@ import Estoque.Exception.EntidadeEmUsoException;
 import Estoque.Exception.EntidadeNaoEncontradaException;
 import Estoque.model.Produto;
 import Estoque.repository.ProdutoRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 
 
 @RequestMapping(value = "/produto")
 @RestController
 public class ProdutoController {
+	
+	@PersistenceContext
+	private EntityManager manager;
 	
 	@Autowired
 	public ProdutoRepository produtorepository;
@@ -55,12 +60,11 @@ public class ProdutoController {
 	
 	@PutMapping("/{produtoId}")
 	public ResponseEntity<Produto> atualizar(@PathVariable int produtoId, @RequestBody Produto produto){
-		Optional<Produto> produtoAtual = produtorepository.findById(produtoId);
-		if(produtoAtual.isPresent()) {
-			BeanUtils.copyProperties(produto, produtoAtual,"id");
+		Produto ProdutoAtual = manager.find(Produto.class, produtoId);
+		if(ProdutoAtual != null) {
+			BeanUtils.copyProperties(produto, ProdutoAtual, "id");
 			
-			Produto produtoSalvo = produtorepository.save(produtoAtual.get());
-			return ResponseEntity.ok(produtoSalvo);
+			return ResponseEntity.ok(ProdutoAtual);
 		}
 		return ResponseEntity.notFound().build();
 	}

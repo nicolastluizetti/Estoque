@@ -2,5 +2,5 @@ insert into produto (nome, descricao, preco, quantidade, unidade) values ('Cabo'
 insert into produto (nome, descricao, preco, quantidade, unidade) values ('Rj-45', 'Conector RJ-45', 0.10, 10, 'un')
 
 
-insert into cliente (nome) values ('Matrix');
-insert into cliente (nome) values ('Transporte valdo');
+insert into cliente (nome, sexocliente) values ('Matrix','MASC');
+insert into cliente (nome, sexocliente) values ('Transporte valdo','FEM');

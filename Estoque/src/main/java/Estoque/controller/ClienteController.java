@@ -23,10 +23,17 @@ import Estoque.Exception.EntidadeEmUsoException;
 import Estoque.Exception.EntidadeNaoEncontradaException;
 import Estoque.model.Cliente;
 import Estoque.repository.ClienteRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 @RequestMapping(value = "/cliente")
 @RestController
 public class ClienteController {
+	
+	@PersistenceContext
+	private EntityManager manager; 
+	
+	
 	@Autowired
 	public ClienteRepository clienterepository;
 	
@@ -52,12 +59,10 @@ public class ClienteController {
 	
 	@PutMapping("/{clienteId}")
 	public ResponseEntity<Cliente> atualizar(@PathVariable int clienteId, @RequestBody Cliente cliente){
-		Optional<Cliente> clienteAtual = clienterepository.findById(clienteId);
-		if(clienteAtual.isPresent()) {
+		Cliente clienteAtual = manager.find(Cliente.class, clienteId);
+		if(clienteAtual!=null) {
 			BeanUtils.copyProperties(cliente, clienteAtual,"id");
-			
-			Cliente clienteSalvo = clienterepository.save(clienteAtual.get());
-			return ResponseEntity.ok(clienteSalvo);
+			return ResponseEntity.ok(clienteAtual);
 		}
 		return ResponseEntity.notFound().build();
 	}
