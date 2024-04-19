@@ -9,7 +9,7 @@ import lombok.Setter;
 @Embeddable
 public class EnderecoEntregaPedido {
 	
-	 private String cep;
+		private String cep;
 
 	    private String logradouro;
 
